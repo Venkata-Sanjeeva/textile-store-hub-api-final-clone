@@ -1,6 +1,8 @@
 package com.example.adminDashboardProject.service;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -123,7 +125,8 @@ public class ProductVariantService {
             sale.setQuantity(item.getQuantity());
             // Assuming your ProductVariant has a price field
             sale.setTotalPrice(item.getTotalPrice());
-            sale.setSaleDate(LocalDateTime.now());
+         // Gets the exact time in India
+            sale.setSaleDate(ZonedDateTime.now(ZoneId.of("Asia/Kolkata")).toLocalDateTime());
             saleRepo.save(sale);
         }
         return true;
