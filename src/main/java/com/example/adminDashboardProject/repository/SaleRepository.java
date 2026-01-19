@@ -9,25 +9,25 @@ import com.example.adminDashboardProject.entity.Sale;
 
 public interface SaleRepository extends JpaRepository<Sale, Long> {
     // Custom query to get revenue for today 
-    @Query("SELECT SUM(s.totalPrice) FROM Sale s WHERE DATE(s.saleDate) = CURRENT_DATE")
-    Double getTotalRevenueForToday();
+	@Query("SELECT SUM(s.totalPrice) FROM Sale s WHERE CAST(s.saleDate AS date) = CURRENT_DATE")
+	Double getTotalRevenueForToday();
 
     // Custom query to get revenue for the current month 
-    @Query("SELECT SUM(s.totalPrice) FROM Sale s WHERE YEAR(s.saleDate) = YEAR(CURRENT_DATE) AND MONTH(s.saleDate) = MONTH(CURRENT_DATE)")
-    Double getTotalRevenueForCurrentMonth();
+	@Query("SELECT SUM(s.totalPrice) FROM Sale s " +
+		       "WHERE EXTRACT(YEAR FROM s.saleDate) = EXTRACT(YEAR FROM CURRENT_DATE) " +
+		       "AND EXTRACT(MONTH FROM s.saleDate) = EXTRACT(MONTH FROM CURRENT_DATE)")
+	Double getTotalRevenueForCurrentMonth();
 
- // Added ORDER BY HOUR(s.saleDate) ASC
-    @Query("SELECT HOUR(s.saleDate), SUM(s.totalPrice) FROM Sale s " +
-           "WHERE DATE(s.saleDate) = CURRENT_DATE " +
-           "GROUP BY HOUR(s.saleDate) " +
-           "ORDER BY HOUR(s.saleDate) ASC")
-    List<Object[]> getDailyChartData();
+	@Query("SELECT EXTRACT(HOUR FROM s.saleDate), SUM(s.totalPrice) FROM Sale s " +
+		       "WHERE CAST(s.saleDate AS date) = CURRENT_DATE " +
+		       "GROUP BY EXTRACT(HOUR FROM s.saleDate) " +
+		       "ORDER BY EXTRACT(HOUR FROM s.saleDate) ASC")
+	List<Object[]> getDailyChartData();
 
-    // Added ORDER BY DATE(s.saleDate) ASC
-    @Query("SELECT DATE(s.saleDate), SUM(s.totalPrice) FROM Sale s " +
-           "WHERE MONTH(s.saleDate) = MONTH(CURRENT_DATE) " +
-           "AND YEAR(s.saleDate) = YEAR(CURRENT_DATE) " +
-           "GROUP BY DATE(s.saleDate) " +
-           "ORDER BY DATE(s.saleDate) ASC")
-    List<Object[]> getMonthlyChartData();
+	@Query("SELECT CAST(s.saleDate AS date), SUM(s.totalPrice) FROM Sale s " +
+		       "WHERE EXTRACT(MONTH FROM s.saleDate) = EXTRACT(MONTH FROM CURRENT_DATE) " +
+		       "AND EXTRACT(YEAR FROM s.saleDate) = EXTRACT(YEAR FROM CURRENT_DATE) " +
+		       "GROUP BY CAST(s.saleDate AS date) " +
+		       "ORDER BY CAST(s.saleDate AS date) ASC")
+	List<Object[]> getMonthlyChartData();
 }

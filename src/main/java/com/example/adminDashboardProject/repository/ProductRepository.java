@@ -41,19 +41,19 @@ public interface ProductRepository extends JpaRepository<Product, Long>, JpaSpec
     
     // 5. Low stock alerts
     @Query("SELECT p.id, p.name, SUM(v.stockQuantity) as totalStock, COUNT(v) AS variantsCount " +
-           "FROM Product p JOIN p.variants v " +
-           "GROUP BY p.id, p.name " +
-           "HAVING SUM(v.stockQuantity) < :threshold")
+    	       "FROM Product p JOIN p.variants v " +
+    	       "GROUP BY p.id, p.name " + // Ensure both are here
+    	       "HAVING SUM(v.stockQuantity) < :threshold")
     List<Object[]> findLowStockProducts(@Param("threshold") Long threshold);
     
     // 6. Filtered Search (Native Query)
     @Query(value = "SELECT DISTINCT p.* FROM products p " +
             "LEFT JOIN product_variants v ON p.id = v.product_id " +
-            "WHERE (:categoryId IS NULL OR :categoryId = 0 OR p.category_id = :categoryId) " +
-            "AND (:brandId IS NULL OR :brandId = 0 OR p.brand_id = :brandId) " +
+            "WHERE (:categoryId IS NULL OR p.category_id = :categoryId) " + // Simplified
+            "AND (:brandId IS NULL OR p.brand_id = :brandId) " +
             "AND (:size IS NULL OR :size = '' OR v.size = :size) " +
             "AND (:search IS NULL OR :search = '' OR " +
-            "(LOWER(p.name) LIKE LOWER(CONCAT('%', :search, '%')) OR LOWER(p.unique_id) LIKE LOWER(CONCAT('%', :search, '%'))))", 
+            "(p.name ILIKE CONCAT('%', :search, '%') OR p.unique_id ILIKE CONCAT('%', :search, '%')))", 
             nativeQuery = true)
     List<Product> findFilteredProducts(
              @Param("categoryId") Long categoryId,
