@@ -27,10 +27,11 @@ public class SalesController {
     public ResponseEntity<?> getSalesStats(@RequestParam String view) {
         Map<String, Object> response = new HashMap<>();
         List<Map<String, Object>> chartData = new ArrayList<>();
-
+    
         if ("daily".equalsIgnoreCase(view)) {
             response.put("totalRevenue", saleRepo.getTotalRevenueForToday());
-            // Format data for Recharts: { label: '10:00', value: 450 }
+            response.put("totalOrders", saleRepo.countSalesToday()); // Corrected
+            
             saleRepo.getDailyChartData().forEach(row -> {
                 Map<String, Object> point = new HashMap<>();
                 point.put("label", row[0].toString() + ":00");
@@ -39,6 +40,8 @@ public class SalesController {
             });
         } else {
             response.put("totalRevenue", saleRepo.getTotalRevenueForCurrentMonth());
+            response.put("totalOrders", saleRepo.countSalesThisMonth()); // Corrected
+            
             saleRepo.getMonthlyChartData().forEach(row -> {
                 Map<String, Object> point = new HashMap<>();
                 point.put("label", row[0].toString());
@@ -46,9 +49,8 @@ public class SalesController {
                 chartData.add(point);
             });
         }
-
+    
         response.put("chartData", chartData);
-        response.put("totalOrders", chartData.size()); // Sample logic for total orders
         return ResponseEntity.ok(response);
     }
 }
