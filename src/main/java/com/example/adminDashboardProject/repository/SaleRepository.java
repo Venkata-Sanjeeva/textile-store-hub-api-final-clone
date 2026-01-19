@@ -18,6 +18,13 @@ public interface SaleRepository extends JpaRepository<Sale, Long> {
 		       "AND EXTRACT(MONTH FROM s.saleDate) = EXTRACT(MONTH FROM CURRENT_DATE)")
 	Double getTotalRevenueForCurrentMonth();
 
+	@Query(value = "SELECT COUNT(*) FROM sales WHERE sale_date::date = CURRENT_DATE", nativeQuery = true)
+    Long countSalesToday();
+
+    // 4. Count Sales This Month
+    @Query(value = "SELECT COUNT(*) FROM sales WHERE date_trunc('month', sale_date) = date_trunc('month', CURRENT_DATE)", nativeQuery = true)
+    Long countSalesThisMonth();
+
 	@Query("SELECT CAST(EXTRACT(HOUR FROM s.saleDate) AS int), SUM(s.totalPrice) FROM Sale s " +
 		       "WHERE CAST(s.saleDate AS date) = CURRENT_DATE " +
 		       "GROUP BY 1 ORDER BY 1 ASC")
