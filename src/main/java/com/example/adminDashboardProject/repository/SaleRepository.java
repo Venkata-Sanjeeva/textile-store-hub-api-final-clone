@@ -22,7 +22,7 @@ public interface SaleRepository extends JpaRepository<Sale, Long> {
     Long countSalesToday();
 
     // 4. Count Sales This Month
-    @Query(value = "SELECT COUNT(*) FROM Sale s WHERE date_trunc('month', s.sale_date) = date_trunc('month', CURRENT_DATE)", nativeQuery = true)
+    @Query(value = "SELECT COUNT(*) FROM Sale s WHERE date_trunc('month', s.saleDate) = date_trunc('month', CURRENT_DATE)", nativeQuery = true)
     Long countSalesThisMonth();
 
 	@Query("SELECT CAST(EXTRACT(HOUR FROM s.saleDate) AS int), SUM(s.totalPrice) FROM Sale s " +
