@@ -18,10 +18,9 @@ public interface SaleRepository extends JpaRepository<Sale, Long> {
 		       "AND EXTRACT(MONTH FROM s.saleDate) = EXTRACT(MONTH FROM CURRENT_DATE)")
 	Double getTotalRevenueForCurrentMonth();
 
-	@Query("SELECT EXTRACT(HOUR FROM s.saleDate), SUM(s.totalPrice) FROM Sale s " +
+	@Query("SELECT CAST(EXTRACT(HOUR FROM s.saleDate) AS int), SUM(s.totalPrice) FROM Sale s " +
 		       "WHERE CAST(s.saleDate AS date) = CURRENT_DATE " +
-		       "GROUP BY EXTRACT(HOUR FROM s.saleDate) " +
-		       "ORDER BY EXTRACT(HOUR FROM s.saleDate) ASC")
+		       "GROUP BY 1 ORDER BY 1 ASC")
 	List<Object[]> getDailyChartData();
 
 	@Query("SELECT CAST(s.saleDate AS date), SUM(s.totalPrice) FROM Sale s " +

@@ -48,8 +48,8 @@ public interface ProductRepository extends JpaRepository<Product, Long>, JpaSpec
     
     // 6. Filtered Search (Native Query)
     @Query(value = "SELECT DISTINCT p.* FROM products p " +
-            "LEFT JOIN product_variants v ON p.id = v.product_id " +
-            "WHERE (:categoryId IS NULL OR p.category_id = :categoryId) " + // Simplified
+            "LEFT JOIN product_variants v ON p.unique_id = v.product_unique_id " + // FIXED JOIN CONDITION
+            "WHERE (:categoryId IS NULL OR p.category_id = :categoryId) " +
             "AND (:brandId IS NULL OR p.brand_id = :brandId) " +
             "AND (:size IS NULL OR :size = '' OR v.size = :size) " +
             "AND (:search IS NULL OR :search = '' OR " +

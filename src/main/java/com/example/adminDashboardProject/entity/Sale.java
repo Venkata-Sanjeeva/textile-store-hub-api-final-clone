@@ -2,6 +2,8 @@ package com.example.adminDashboardProject.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
+
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
@@ -13,6 +15,7 @@ public class Sale {
 
     private Long variantId;
     private Integer quantity;
-    private Double totalPrice;
+    @Column(precision = 10, scale = 2)
+    private BigDecimal totalPrice;
     private LocalDateTime saleDate; // This is crucial for "Daily/Monthly" filters
 }
