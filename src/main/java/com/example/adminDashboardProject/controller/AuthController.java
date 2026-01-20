@@ -21,19 +21,21 @@ public class AuthController {
 
 	@PostMapping("/login")
 	public ResponseEntity<?> verifyUser(@RequestBody User user) {
-		String userPassword = user.getPassword();
-		
 		User availableUser = userRepo.findByUsername(user.getUsername());
 		
-		if(availableUser == null || !availableUser.getUserType().equals(UserType.ADMIN) || !userPassword.equals(availableUser.getPassword())) {
-			return (ResponseEntity<?>) ResponseEntity.badRequest();
+		// Check if user exists, is admin, and password matches
+		if (availableUser == null || 
+			!availableUser.getUserType().equals(UserType.ADMIN) || 
+			!user.getPassword().equals(availableUser.getPassword())) {
+			
+			// .build() creates the actual ResponseEntity object
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials or insufficient permissions");
 		}
 		
-		Map<String, String> obj = new HashMap<String, String>();
+		Map<String, String> response = new HashMap<>();
+		response.put("username", user.getUsername());
+		response.put("status", "success");
 		
-		obj.put("username", user.getUsername());
-		obj.put("password", user.getPassword());
-		
-		return ResponseEntity.ok(obj);
+		return ResponseEntity.ok(response);
 	}
 }

@@ -8,4 +8,7 @@ import com.example.adminDashboardProject.entity.Brand;
 @Repository
 public interface BrandRepository extends JpaRepository<Brand, Long>{
 	boolean existsByName(String name);
+
+	// Checks for match regardless of case (Standard way to prevent "Nike" vs "nike")
+    boolean existsByNameIgnoreCase(String name);
 }

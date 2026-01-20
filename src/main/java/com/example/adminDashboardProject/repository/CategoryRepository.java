@@ -14,4 +14,7 @@ public interface CategoryRepository extends JpaRepository<Category, Long>{
     List<Category> findAll();
     
     boolean existsByName(String name);
+
+    // Checks for match regardless of case (Standard way to prevent "Shirt" vs "shirt")
+    boolean existsByNameIgnoreCase(String name);
 }

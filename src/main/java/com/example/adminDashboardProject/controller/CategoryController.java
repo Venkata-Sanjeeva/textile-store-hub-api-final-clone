@@ -36,7 +36,7 @@ public class CategoryController {
     @PostMapping
     public ResponseEntity<?> createCategory(@RequestBody Category category) {
         // 1. Check if the brand name already exists
-        if (categoryRepository.existsByName(category.getName())) {
+        if (categoryRepository.existsByNameIgnoreCase(category.getName())) {
             return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
                 .body("Error: Category name '" + category.getName() + "' already exists.");

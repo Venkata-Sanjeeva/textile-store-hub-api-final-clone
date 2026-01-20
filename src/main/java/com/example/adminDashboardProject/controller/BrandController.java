@@ -34,7 +34,7 @@ public class BrandController {
     @PostMapping
     public ResponseEntity<?> createBrand(@RequestBody Brand brand) {
         // 1. Check if the brand name already exists
-        if (brandRepository.existsByName(brand.getName())) {
+        if (brandRepository.existsByNameIgnoreCase(brand.getName())) {
             return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
                 .body("Error: Brand name '" + brand.getName() + "' already exists.");
