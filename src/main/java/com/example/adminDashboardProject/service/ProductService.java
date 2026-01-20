@@ -20,7 +20,7 @@ import com.example.adminDashboardProject.repository.*;
 @Service
 public class ProductService {
 
-    private final String UPLOAD_DIR = "C:/my-app-uploads/";
+    private final String UPLOAD_DIR = "/app/uploads";
     
     @Autowired
     private ProductRepository productRepo;
