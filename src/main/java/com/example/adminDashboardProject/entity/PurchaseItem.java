@@ -1,5 +1,7 @@
 package com.example.adminDashboardProject.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -21,6 +23,7 @@ public class PurchaseItem {
 
     @ManyToOne
     @JoinColumn(name = "purchase_unique_id", referencedColumnName = "purchaseUniqueId")
+    @JsonIgnore // Completely hides the purchase field in the JSON output
     private Purchase purchase;
 
     private String productName;

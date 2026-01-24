@@ -9,7 +9,6 @@ import lombok.Data;
 @Data
 public class PurchaseDTO {
 
-	private String purchaseUniqueId;
 	private String customerName;
 	private String customerPhone;
 	private Double subtotal;
